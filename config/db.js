@@ -1,8 +1,8 @@
 const Sequelize = require("sequelize");
-const database = process.env.DATABASE;
-const userMySQL = process.env.USER_MYSQL
-const passMySQL = process.env.DB_PASS;
-const hostMySQL = process.env.DB_HOST;
+const database = process.env.MYSQLDATABASE;
+const userMySQL = process.env.MYSQLUSER
+const passMySQL = process.env.MYSQLPASSWORD;
+const hostMySQL = process.env.MYSQLHOST;
 
 const db = new Sequelize(database, userMySQL, passMySQL, {
   host: hostMySQL,
