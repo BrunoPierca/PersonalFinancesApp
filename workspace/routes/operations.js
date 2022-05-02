@@ -21,7 +21,6 @@ router.post("/create", async (req, res, next) => {
   const newOperation = req.body.data;
   console.log(typeof newOperation.userID);
   if (newOperation.userID != undefined && newOperation.userID != null) {
-    console.log("???");
     try {
       await Operation.create({
         type: newOperation.type,
