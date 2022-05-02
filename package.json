@@ -4,7 +4,7 @@
   "description": "This app helps you keep track of your earnings/expenses and is part of a project for Alkemy",
   "main": "app.js",
   "scripts": {
-    "start": " app.js",
+    "start": "run app.js",
     "dev": "nodemon app.js"
   },
   "author": "Bruno Pierca",
