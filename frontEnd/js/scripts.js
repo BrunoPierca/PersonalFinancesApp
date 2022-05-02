@@ -1,4 +1,4 @@
-const myURL = "http://localhost:3000";
+const myURL = "https://personalfinancesapp-production.up.railway.app";
 // let userLogged;
 // let accessToken = window.localStorage.getItem("accessToken");
 let userID;
@@ -28,6 +28,7 @@ const logOutBtn = document.getElementById("logOutBtn");
 logOutBtn.addEventListener("click", () => {
   localStorage.removeItem("accessToken");
   authElementsToggle();
+  location.reload()
 });
 
 // Toggle logged in Elements
@@ -156,9 +157,16 @@ async function handleAuthResponse(response) {
   const res = await response;
   userID = res.userID;
   accessToken = res.accessToken;
-  localStorage.setItem("accessToken", accessToken),
-  localStorage.setItem("userID" , userID),
-  authElementsToggle()
+  localStorage.setItem("accessToken", accessToken);
+  localStorage.setItem("userID" , userID);
+  if (res.message=="User logged in") {
+    authElementsToggle()
+    getOperations()
+  }
+  if (res.message=="User succesfully created") {
+    authElementsToggle()
+    console.log("Welcome ;)");
+  }
 }
 
 async function handleOperationsResponse(response , data){
@@ -421,16 +429,18 @@ let parsedArray = [];
 
 function getOfflineOperations() {
     const str = localStorage.getItem("rows");
-    parsedArray = JSON.parse(str);
-    let maxIterations = parsedArray.length;
-    if (parsedArray.length > 10) {
-      maxIterations = 10;
+    if (str != undefined) {
+      parsedArray = JSON.parse(str);
+      let maxIterations = parsedArray.length;
+      if (parsedArray.length > 10) {
+        maxIterations = 10;
+      }
+      for (let index = 0; index < maxIterations; index++) {
+        addOperationRow(parsedArray[index], index);
+        rowsArr.push(parsedArray[index]);
+      }
+      initializeButtons();
     }
-    for (let index = 0; index < maxIterations; index++) {
-      addOperationRow(parsedArray[index], index);
-      rowsArr.push(parsedArray[index]);
-    }
-    initializeButtons();
 }
 
 
@@ -550,11 +560,14 @@ async function getOperations() {
       dbRows.push(data)
     }
   }
-  for (let index = maxIterations ; index >= 0; index--) {
-    const data = reverseSequelizeOperationsArray[index];
-    addOperationRow(data, data.ID , true , true)
-    dbRows.push(data)
+  if (reverseSequelizeOperationsArray.length <= maxIterations) {
+    for (let index = reverseSequelizeOperationsArray.length-1 ; index >= 0; index--) {
+      const data = reverseSequelizeOperationsArray[index];
+      addOperationRow(data, data.ID , true , true)
+      dbRows.push(data)
+    }
   }
+
   initializeButtons();
   updateTable()
 }
@@ -564,8 +577,10 @@ function updateTable() {
   tableBody = document.getElementById("tableBody")
     for (let index = 0; index < tableBody.children.length; index++) {
       const element = tableBody.children[index].children[1];
-      let noCommas = element.innerHTML.replace("," , "")
+      let noCommas = element.innerHTML.replaceAll("," , "")
+      console.log(noCommas , "nocommas");
       const number = parseInt(noCommas.slice(1))
+      console.log(number);
       let typeCell = tableBody.children[index].children[0].firstChild
       if (typeCell.classList.contains("fa-plus")) {
         balance += number

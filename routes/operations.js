@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const app = require("../app");
-const { Operation, today } = require("../models/operations");
+const { Operation, today } = require("../models/Operations");
 const jwt = require("jsonwebtoken")
 require("dotenv/config"); 
 
@@ -16,19 +16,6 @@ router.get("/" , async (req, res) => {
     res.send(error);
   }
 });
-
-// Dev-------------------------------------------------------------------
-router.options("/create", (req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH");
-  next();
-});
-// ----------------------------------------------------------------------
 
 router.post("/create", async (req, res, next) => {
   const newOperation = req.body.data;
@@ -53,7 +40,6 @@ router.post("/create", async (req, res, next) => {
         createdOperation,
       });
     } catch (error) {
-      console.log(error);
       res
         .status(400)
         .json({ error: error, message: "Couldn't create operation" });
@@ -66,7 +52,7 @@ router.post("/create", async (req, res, next) => {
 router.put("/edit", async (req, res) => {
   const operationInfo = req.body.data;
   try {
-    let operation = await Operation.findOne({ where: { id: operationInfo.ID } });
+    let operation = await Operation.findOne({ where: { ID: operationInfo.ID } });
     operation.set({
       amount: operationInfo.amount,
       concept: operationInfo.concept,
@@ -78,14 +64,14 @@ router.put("/edit", async (req, res) => {
       newOperation: newValue
     })
   } catch (error) {
-    res.send(error);
+    res.status(400).send(error);
   }
 });
 
 router.delete("/delete" , async (req, res) =>{
   const operationID = req.body.data;
   try {
-    let operation = await Operation.findOne({ where: { id: operationID } });
+    let operation = await Operation.findOne({ where: { ID: operationID } });
     if (operation != null) {
       await operation.destroy()
       res.status(200).json({

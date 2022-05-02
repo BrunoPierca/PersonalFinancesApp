@@ -7,6 +7,7 @@ const { hash } = require("bcrypt");
 const res = require("express/lib/response");
 const jwt = require("jsonwebtoken");
 const Operation = require("./operations");
+const { user } = require("pg/lib/defaults");
 require("dotenv/config");
 
 // Encrypt passwords
@@ -34,7 +35,6 @@ router.post("/signup", async (req, res, next) => {
           email: email,
           password: password,
         }).then((user) => {
-          console.log("user is =>", user);
           const accessToken = jwt.sign(
             user.dataValues,
             process.env.ACCESS_TOKEN_SECRET
@@ -78,7 +78,7 @@ router.post("/login", async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(400).json({ message: "couldn't find user", error: error });
+    res.status(400).json({ message: "couldn't find user" , user: user, error: error });
   }
 });
 

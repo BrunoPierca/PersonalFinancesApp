@@ -22,5 +22,13 @@ const Operation = db.define("finances", {
   category: { type: Sequelize.TEXT },
   userID: { type: Sequelize.INTEGER },
 });
-
+async function checkTable() {
+  try {
+    await Operation.sync();
+    console.log("Operation.Sync(TUKI)");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+}
+checkTable()
 module.exports = { Operation, today };

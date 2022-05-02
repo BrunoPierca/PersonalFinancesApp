@@ -2,6 +2,10 @@ const Sequelize = require("sequelize");
 const app = require("../app");
 const db = require("../config/db.js");
 
+// async function initiateUser() {
+  
+// }
+
 const User = db.define("users", {
   ID: {
     type: Sequelize.INTEGER,
@@ -12,18 +16,9 @@ const User = db.define("users", {
   email: { type: Sequelize.TEXT },
   password: { type: Sequelize.TEXT },
 });
-
-async function test() {
-  try {
-    await User.create({
-      email: "maximovirgolini@gmail.cum",
-      password: "uwus",
-    });
-    console.log("User created");
-  } catch (error) {
-    console.log(error);
-  }
+async function checkTable() {
+  await User.sync();
 }
-// test();
+checkTable()
 
 module.exports = User;
