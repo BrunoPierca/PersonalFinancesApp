@@ -24,8 +24,10 @@ console.log("App listening on port: " + process.env.PORT);
 // Routes
 let operationsRouter = require("./routes/operations");
 let authRouter = require("./routes/userAuth");
+let contactRouter = require("./routes/contact");
 
 app.use("/operations", operationsRouter);
 app.use("/auth", authRouter);
+app.use("/contact", contactRouter);
 
 module.exports = app;
