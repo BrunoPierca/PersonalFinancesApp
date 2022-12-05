@@ -1,19 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const app = require("../app");
 const transporter = require("../config/Nodemailer");
 require("dotenv/config");
 
 router.post("/", async (req, res) => {
-	const {
-		name,
-		email,
-		subject,
-		message,
-		receiverEmail,
-		receiverNickname,
-		website,
-	} = req.body.data;
+	const { name, email, subject, message, receiverEmail, receiverNickname, website } = req.body.data;
 	async function main() {
 		// Envio, segun la conexion del Transport
 		try {
